@@ -1,0 +1,21 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tecno-shop
+    command: gunicorn tecno_shop.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    environment:
+      - DB_DIR=/app/db
+    env_file:
+      - .env
+    volumes:
+      - db_data:/app/db
+      - media_data:/app/media
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  media_data:
